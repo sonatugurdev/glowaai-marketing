@@ -5,8 +5,9 @@ type Payload = {
   name?: string;
   email?: string;
   practice?: string;
-  website?: string;
-  role?: string;
+  phone?: string;
+  country?: string;
+  message?: string;
 };
 
 function isValidEmail(e: string) {
@@ -24,8 +25,9 @@ export async function POST(req: Request) {
   const name     = body.name?.trim();
   const email    = body.email?.trim().toLowerCase();
   const practice = body.practice?.trim();
-  const website  = body.website?.trim() || null;
-  const role     = body.role?.trim() || null;
+  const phone    = body.phone?.trim() || null;
+  const country  = body.country?.trim() || null;
+  const message  = body.message?.trim() || null;
 
   if (!name || !email || !practice) {
     return NextResponse.json(
@@ -41,19 +43,19 @@ export async function POST(req: Request) {
   }
 
   if (isSupabaseConfigured()) {
-    const result = await supabaseInsert("waitlist_signups", {
-      name, email, practice, website, role
+    const result = await supabaseInsert("demo_requests", {
+      name, email, practice, phone, country, message
     });
     if (!result.ok) {
-      console.error("[waitlist] Supabase error:", result.error);
+      console.error("[demo] Supabase error:", result.error);
       return NextResponse.json(
-        { error: "Couldn't save your entry. Please try again." },
+        { error: "Couldn't save your request. Please try again." },
         { status: 500 }
       );
     }
   } else {
-    console.log("[waitlist] signup (Supabase not configured):", {
-      name, email, practice, website, role,
+    console.log("[demo] New demo request (Supabase not configured):", {
+      name, email, practice, phone, country, message,
       at: new Date().toISOString()
     });
   }

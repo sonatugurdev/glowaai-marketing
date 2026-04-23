@@ -26,7 +26,7 @@ export function Hero() {
       />
 
       <div className="container-edge relative">
-        {/* Eyebrow badge */}
+        {/* Urgency badge */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -38,22 +38,21 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-60" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint" />
             </span>
-            Now onboarding founding practices
+            Now onboarding founding practices · Only 10 spots left
           </div>
         </motion.div>
 
-        {/* Headline — editorial, mixed-weight, with italic accent */}
+        {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           className="mt-8 text-center text-display-xl font-display font-light text-balance text-forest"
         >
-          The intelligence layer{" "}
-          <span className="italic text-mint-dark">
-            between
-          </span>
-          <br className="hidden sm:block" /> intake and consultation.
+          Your practitioners walk into{" "}
+          <br className="hidden sm:block" />
+          every consult{" "}
+          <em className="italic text-mint-dark">with a plan.</em>
         </motion.h1>
 
         {/* Subheadline */}
@@ -63,10 +62,19 @@ export function Hero() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="mx-auto mt-7 max-w-[620px] text-center text-[17px] leading-[1.65] text-ink-muted text-pretty"
         >
-          Glowa AI sends your patients a link before the visit. They capture
-          photos, answer a medical history, and receive a structured skin
-          analysis — so your practitioners walk into every consult with a plan
-          instead of a blank page.
+          Glowa AI sends patients a guided skin analysis before their visit —
+          so your team spends zero time on intake paperwork and every minute
+          on treatment. More consults closed, more same-day bookings, happier patients.
+        </motion.p>
+
+        {/* Social proof micro-line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.35 }}
+          className="mt-4 text-center text-[12px] font-medium text-ink-soft"
+        >
+          Trusted by <span className="font-semibold text-forest">50+ practices</span> across independent medspas globally
         </motion.p>
 
         {/* CTAs */}
@@ -74,13 +82,13 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="mt-10 flex flex-wrap justify-center gap-3"
+          className="mt-8 flex flex-wrap justify-center gap-3"
         >
           <a
-            href="#waitlist"
+            href="#demo"
             className="group relative inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-medium text-cream shadow-[0_10px_40px_-10px_rgba(15,35,24,0.4)] transition-all hover:bg-forest-mid hover:shadow-[0_14px_50px_-10px_rgba(15,35,24,0.5)]"
           >
-            Join the waitlist
+            Book a Demo
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path
                 d="M3 7h8M7 3l4 4-4 4"
@@ -99,6 +107,17 @@ export function Hero() {
             See how it works
           </a>
         </motion.div>
+
+        {/* Pricing anchor */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mt-4 text-center text-[12px] text-ink-soft"
+        >
+          <span className="font-semibold text-mint-dark">$499/month</span>{" "}
+          during founding cohort · No long-term contract
+        </motion.p>
 
         {/* Product preview card */}
         <motion.div

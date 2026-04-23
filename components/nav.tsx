@@ -10,6 +10,7 @@ const navItems = [
   { label: "How it works", href: "#how" },
   { label: "Why Glowa", href: "#why" },
   { label: "Product", href: "#product" },
+  { label: "Pricing", href: "#demo" },
   { label: "FAQ", href: "#faq" }
 ];
 
@@ -59,10 +60,10 @@ export function Nav() {
 
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href="#waitlist"
+            href="#demo"
             className="group relative inline-flex items-center gap-1.5 rounded-full bg-forest px-4 py-2 text-[13px] font-medium text-cream transition-all hover:bg-forest-mid"
           >
-            Join waitlist
+            Book a Demo
             <svg
               width="12"
               height="12"
