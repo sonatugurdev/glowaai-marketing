@@ -1,15 +1,14 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
-import { Stats } from "@/components/stats";
-import { Problem } from "@/components/problem";
-import { HowItWorks } from "@/components/how-it-works";
-import { PatientBenefits } from "@/components/patient-benefits";
+import { TrustedBy } from "@/components/trusted-by";
 import { Features } from "@/components/features";
-import { CompetitiveStrip } from "@/components/competitive-strip";
-import { Quote } from "@/components/quote";
+import { BeforeAfter } from "@/components/before-after";
+import { Metrics } from "@/components/metrics";
+import { Testimonials } from "@/components/testimonials";
 import { FAQ } from "@/components/faq";
 import { DemoForm } from "@/components/demo-form";
 import { Footer } from "@/components/footer";
+import { RevealObserver } from "@/components/reveal-observer";
 
 export default function Home() {
   return (
@@ -17,17 +16,16 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Stats />
-        <Problem />
-        <HowItWorks />
-        <PatientBenefits />
+        <TrustedBy />
         <Features />
-        <CompetitiveStrip />
-        <Quote />
+        <BeforeAfter />
+        <Metrics />
+        <Testimonials />
         <FAQ />
         <DemoForm />
       </main>
       <Footer />
+      <RevealObserver />
     </>
   );
 }

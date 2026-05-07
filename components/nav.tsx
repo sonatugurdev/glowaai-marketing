@@ -1,127 +1,78 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { Logo } from "./logo";
-import { cn } from "@/lib/utils";
-
-const navItems = [
-  { label: "How it works", href: "#how" },
-  { label: "Why Glowa", href: "#why" },
-  { label: "Product", href: "#product" },
-  { label: "Pricing", href: "#demo" },
-  { label: "FAQ", href: "#faq" }
-];
+import { useState } from "react";
 
 export function Nav() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+  const [open, setOpen] = useState(false);
   return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled
-          ? "border-b border-line/70 bg-cream/85 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
-      )}
-    >
-      <div className="container-edge flex h-[72px] items-center justify-between">
-        <a
-          href="#top"
-          className="focus-ring rounded-md"
-          aria-label="Glowa AI — home"
-        >
-          <Logo />
-        </a>
-
-        <div className="hidden items-center gap-9 md:flex">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-[13px] font-medium tracking-[-0.01em] text-ink-muted transition-colors hover:text-forest"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-
-        <div className="hidden items-center gap-3 md:flex">
-          <a
-            href="#demo"
-            className="group relative inline-flex items-center gap-1.5 rounded-full bg-forest px-4 py-2 text-[13px] font-medium text-cream transition-all hover:bg-forest-mid"
-          >
-            Book a Demo
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              className="transition-transform group-hover:translate-x-0.5"
-            >
-              <path
-                d="M2.5 6h7M6 2.5L9.5 6 6 9.5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+    <>
+      <nav id="nav" style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        background: "rgba(26,74,46,0.97)", backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255,255,255,0.08)", transition: "box-shadow 0.3s"
+      }}>
+        <div className="nav-inner" style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          height: 64, maxWidth: 1120, margin: "0 auto", padding: "0 28px"
+        }}>
+          {/* Logo */}
+          <a href="#">
+            <svg width="164" height="56" viewBox="0 0 210 74" fill="none">
+              <text x="0" y="52" fontFamily="'DM Sans',sans-serif" fontSize="52" fontWeight="400" fill="#FFFFFF" letterSpacing="-1">Glowa</text>
+              <rect x="160" y="33" width="34" height="22" rx="5" fill="#3FAD6A"/>
+              <text x="165" y="49" fontFamily="'DM Sans',sans-serif" fontSize="12" fontWeight="500" fill="#FFFFFF" letterSpacing="1.5">AI</text>
+              <rect x="0" y="62" width="194" height="0.5" fill="#1E3D2A"/>
+              <text x="0" y="73" fontFamily="'DM Sans',sans-serif" fontSize="7.5" fontWeight="400" fill="#8ED4A8" letterSpacing="2">AI-POWERED SKIN INTELLIGENCE</text>
             </svg>
           </a>
-        </div>
 
-        <button
-          onClick={() => setMobileOpen((v) => !v)}
-          className="focus-ring rounded-md p-2 md:hidden"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          {/* Desktop links */}
+          <ul style={{ display: "flex", alignItems: "center", gap: 28, listStyle: "none" }} className="nav-links-desktop">
+            {[["Features","#features"],["Results","#before-after"],["Testimonials","#testimonials"],["FAQ","#faq"]].map(([l,h]) => (
+              <li key={h}><a href={h} style={{ fontSize: "0.88rem", fontWeight: 400, color: "rgba(255,255,255,0.7)", transition: "color 0.2s", cursor: "pointer" }}
+                onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.7)")}>{l}</a></li>
+            ))}
+          </ul>
+
+          {/* Desktop right */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }} className="nav-right-desktop">
+            <a href="#cta-bar" style={{ fontSize: "0.88rem", color: "rgba(255,255,255,0.6)", cursor: "pointer", transition: "color 0.2s" }}
+              onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.6)")}>Sign in</a>
+            <a href="#cta-bar" className="btn btn-mint" style={{ padding: "10px 20px", fontSize: "0.85rem" }}>Book a demo</a>
+          </div>
+
+          {/* Hamburger */}
+          <button onClick={() => setOpen(v => !v)} className="hamburger-btn" style={{ display: "none", flexDirection: "column", gap: 5, cursor: "pointer", padding: 4, background: "none", border: "none" }}
+            aria-label="Menu">
+            <span style={{ display: "block", width: 20, height: 1.5, background: "#fff", borderRadius: 2 }}/>
+            <span style={{ display: "block", width: 20, height: 1.5, background: "#fff", borderRadius: 2 }}/>
+            <span style={{ display: "block", width: 20, height: 1.5, background: "#fff", borderRadius: 2 }}/>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      <div style={{
+        display: open ? "block" : "none",
+        position: "fixed", top: 64, left: 0, right: 0,
+        background: "#1A4A2E", borderBottom: "1px solid rgba(255,255,255,0.1)",
+        padding: "16px 28px 24px", zIndex: 99
+      }}>
+        {[["Features","#features"],["Results","#before-after"],["Testimonials","#testimonials"],["FAQ","#faq"]].map(([l,h]) => (
+          <a key={h} href={h} onClick={() => setOpen(false)} style={{
+            display: "block", padding: "12px 0", fontSize: "0.95rem",
+            color: "rgba(255,255,255,0.7)", borderBottom: "1px solid rgba(255,255,255,0.1)"
+          }}>{l}</a>
+        ))}
+        <a href="#cta-bar" onClick={() => setOpen(false)} className="btn btn-mint" style={{ width: "100%", justifyContent: "center", marginTop: 12 }}>Book a demo</a>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden border-t border-line bg-cream md:hidden"
-          >
-            <div className="container-edge flex flex-col gap-1 py-5">
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-muted hover:bg-mint-muted hover:text-forest"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <a
-                href="#waitlist"
-                onClick={() => setMobileOpen(false)}
-                className="mt-2 rounded-full bg-forest px-4 py-2.5 text-center text-sm font-medium text-cream"
-              >
-                Join waitlist
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      <style>{`
+        @media(max-width:768px){
+          .nav-links-desktop { display: none !important; }
+          .nav-right-desktop { display: none !important; }
+          .hamburger-btn { display: flex !important; }
+        }
+      `}</style>
+    </>
   );
 }

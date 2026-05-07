@@ -1,96 +1,64 @@
-import { Logo } from "./logo";
-
+"use client";
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-forest text-cream/80">
-      {/* Subtle mesh glow */}
-      <div
-        className="pointer-events-none absolute -top-40 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full opacity-20 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(93,184,122,0.4) 0%, transparent 70%)"
-        }}
-        aria-hidden
-      />
-
-      <div className="container-edge relative py-16 md:py-20">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+    <footer style={{ background: "#132B1C", padding: "56px 0 32px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+      <div className="wrap">
+        <div className="footer-grid-wrap" style={{ display: "grid", gridTemplateColumns: "2.2fr 1fr 1fr 1fr", gap: 48, marginBottom: 48 }}>
+          {/* Brand */}
           <div>
-            <Logo variant="light" />
-            <p className="mt-5 max-w-xs text-[14px] leading-[1.7] text-cream/60">
-              AI pre-visit intelligence for independent medspas. Built by
-              clinicians and engineers who think medspas deserve better than
-              clipboards.
+            <svg width="152" height="52" viewBox="0 0 210 74" fill="none">
+              <text x="0" y="52" fontFamily="'DM Sans',sans-serif" fontSize="52" fontWeight="400" fill="#FFFFFF" letterSpacing="-1">Glowa</text>
+              <rect x="160" y="33" width="34" height="22" rx="5" fill="#3FAD6A"/>
+              <text x="165" y="49" fontFamily="'DM Sans',sans-serif" fontSize="12" fontWeight="500" fill="#FFFFFF" letterSpacing="1.5">AI</text>
+              <rect x="0" y="62" width="194" height="0.5" fill="#1E3D2A"/>
+              <text x="0" y="73" fontFamily="'DM Sans',sans-serif" fontSize="7.5" fontWeight="400" fill="#8ED4A8" letterSpacing="2">AI-POWERED SKIN INTELLIGENCE</text>
+            </svg>
+            <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.7, margin: "14px 0 20px", maxWidth: 280 }}>
+              Clinical-grade AI that increases MedSpa sales by 42% and makes the client intake experience exceptional.
             </p>
+            <div style={{ display: "flex", gap: 8 }}>
+              {["𝕏","in","📘","📸"].map((icon, i) => (
+                <div key={i} style={{ width: 34, height: 34, borderRadius: 8, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", cursor: "pointer", transition: "all 0.2s" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background="rgba(255,255,255,0.12)"; (e.currentTarget as HTMLDivElement).style.color="#fff"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background="rgba(255,255,255,0.06)"; (e.currentTarget as HTMLDivElement).style.color="rgba(255,255,255,0.5)"; }}>
+                  {icon}
+                </div>
+              ))}
+            </div>
           </div>
 
-          <FooterCol
-            title="Product"
-            links={[
-              { label: "How it works", href: "#how" },
-              { label: "Features", href: "#product" },
-              { label: "FAQ", href: "#faq" },
-              { label: "Waitlist", href: "#waitlist" }
-            ]}
-          />
-
-          <FooterCol
-            title="Company"
-            links={[
-              { label: "About", href: "#" },
-              { label: "Careers", href: "#" },
-              { label: "Contact", href: "mailto:hello@glowaai.com" }
-            ]}
-          />
-
-          <FooterCol
-            title="Legal"
-            links={[
-              { label: "Privacy", href: "/privacy" },
-              { label: "Terms", href: "/terms" },
-              { label: "HIPAA", href: "/hipaa" }
-            ]}
-          />
+          <FooterCol title="Product" links={[["Features","#features"],["Results","#before-after"],["FAQ","#faq"],["Book a Demo","#cta-bar"]]}/>
+          <FooterCol title="Company" links={[["About","#"],["Blog","#"],["Careers","#"],["Contact","mailto:hello@glowa.ai"],["Press","#"]]}/>
+          <FooterCol title="Legal" links={[["Privacy Policy","#"],["Terms of Service","#"],["HIPAA Compliance","#"],["Security","#"],["Cookie Policy","#"]]}/>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-cream/10 pt-8 md:flex-row md:items-center">
-          <p className="text-[12px] text-cream/50">
-            &copy; {new Date().getFullYear()} Glowa AI. All rights reserved.
-          </p>
-          <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-cream/50">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint" />
-            </span>
-            In private beta
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.78rem", color: "rgba(255,255,255,0.25)" }} className="footer-bottom-wrap">
+          <span>© 2026 Glowa AI, Inc. All rights reserved.</span>
+          <div>
+            <a href="mailto:hello@glowa.ai" style={{ color: "rgba(255,255,255,0.25)", marginLeft: 20, transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color="rgba(255,255,255,0.6)")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.25)")}>hello@glowa.ai</a>
+            <a href="#" style={{ color: "rgba(255,255,255,0.25)", marginLeft: 20, transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color="rgba(255,255,255,0.6)")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.25)")}>Privacy</a>
+            <a href="#" style={{ color: "rgba(255,255,255,0.25)", marginLeft: 20, transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color="rgba(255,255,255,0.6)")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.25)")}>Terms</a>
           </div>
         </div>
       </div>
+      <style>{`
+        @media(max-width:1024px){ .footer-grid-wrap { grid-template-columns: 1fr 1fr !important; gap: 32px !important; } }
+        @media(max-width:480px){ .footer-grid-wrap { grid-template-columns: 1fr !important; } }
+        @media(max-width:768px){ .footer-bottom-wrap { flex-direction: column !important; gap: 10px !important; text-align: center !important; } }
+      `}</style>
     </footer>
   );
 }
 
-function FooterCol({
-  title,
-  links
-}: {
-  title: string;
-  links: { label: string; href: string }[];
-}) {
+function FooterCol({ title, links }: { title: string; links: string[][] }) {
   return (
     <div>
-      <h4 className="mb-4 text-[11px] font-medium uppercase tracking-[0.14em] text-cream/50">
-        {title}
-      </h4>
-      <ul className="space-y-2.5">
-        {links.map((link) => (
-          <li key={link.label}>
-            <a
-              href={link.href}
-              className="text-[14px] text-cream/80 transition-colors hover:text-mint-light"
-            >
-              {link.label}
-            </a>
+      <h5 style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>{title}</h5>
+      <ul style={{ listStyle: "none" }}>
+        {links.map(([label, href]) => (
+          <li key={label} style={{ marginBottom: 10 }}>
+            <a href={href} style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.5)", transition: "color 0.2s" }}
+              onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.5)")}>{label}</a>
           </li>
         ))}
       </ul>

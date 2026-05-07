@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { type ReactNode } from "react";
+import { type ReactNode, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 type RevealProps = {
@@ -11,15 +11,16 @@ type RevealProps = {
   y?: number;
   as?: "div" | "section" | "span" | "p" | "h1" | "h2" | "h3";
   once?: boolean;
+  style?: CSSProperties;
 };
 
 const variants: Variants = {
   hidden: { opacity: 0, y: 24 },
-  visible: (custom: { delay: number; y: number }) => ({
+  visible: (custom: { delay: number }) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.65,
       ease: [0.16, 1, 0.3, 1],
       delay: custom.delay
     }
@@ -30,18 +31,19 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 24,
   as = "div",
-  once = true
+  once = true,
+  style
 }: RevealProps) {
   const MotionTag = motion[as] as typeof motion.div;
   return (
     <MotionTag
       className={cn(className)}
+      style={style}
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin: "-80px" }}
-      custom={{ delay, y }}
+      custom={{ delay }}
       variants={variants}
     >
       {children}
@@ -49,19 +51,21 @@ export function Reveal({
   );
 }
 
-/** Staggered children reveal - wrap siblings in RevealStagger */
 export function RevealStagger({
   children,
   className,
-  staggerDelay = 0.08
+  staggerDelay = 0.08,
+  style
 }: {
   children: ReactNode;
   className?: string;
   staggerDelay?: number;
+  style?: CSSProperties;
 }) {
   return (
     <motion.div
       className={cn(className)}
+      style={style}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}

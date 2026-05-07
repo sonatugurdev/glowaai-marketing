@@ -1,62 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  axes: ["opsz", "SOFT", "WONK"],
-  display: "swap"
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap"
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap"
-});
-
 export const metadata: Metadata = {
-  title: "Glowa AI — AI pre-visit intelligence for independent medspas",
-  description:
-    "Glowa AI sits between patient intake and the consultation. Structured skin analysis reports arrive before the visit, so practitioners walk in with a plan instead of a blank page.",
-  metadataBase: new URL("https://glowaai.com"),
-  openGraph: {
-    title: "Glowa AI — AI pre-visit intelligence for independent medspas",
-    description:
-      "Structured skin analysis reports arrive before the visit. Practitioners walk in with a plan.",
-    url: "https://glowaai.com",
-    siteName: "Glowa AI",
-    type: "website"
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Glowa AI",
-    description: "AI pre-visit intelligence for independent medspas."
-  }
+  title: "Glowa AI — AI-Powered Skin Intelligence for MedSpas",
+  description: "Glowa AI increases MedSpa sales by 42% with clinical-grade AI skin analysis, personalized treatment recommendations, and SMS-first client intake.",
 };
 
 export const viewport: Viewport = {
   themeColor: "#FAFAF8",
   width: "device-width",
-  initialScale: 1
+  initialScale: 1,
 };
 
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${fraunces.variable} ${inter.variable} ${mono.variable}`}
-    >
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+      </head>
       <body>{children}</body>
     </html>
   );
