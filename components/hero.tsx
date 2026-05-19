@@ -37,7 +37,7 @@ export function Hero() {
           Clinical-grade AI skin analysis that increases your sales by <strong style={{ color: "#72C896" }}>42%</strong> and makes the sales process effortless — delivered to your clients before they walk through the door.
         </p>
         <div className="reveal d2" style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 48 }}>
-          <a href="#cta-bar" className="btn btn-mint btn-lg">Book a demo →</a>
+          <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-lg">Book a demo →</a>
           <a href="#features" className="btn btn-ghost btn-lg">See how it works</a>
         </div>
         <div className="reveal d3" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 24, fontSize: "0.8rem", color: "rgba(28,48,34,0.42)", flexWrap: "wrap" }}>

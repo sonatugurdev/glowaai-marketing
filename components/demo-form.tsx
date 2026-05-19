@@ -1,17 +1,4 @@
-"use client";
-import { useState } from "react";
-
 export function DemoForm() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle"|"error"|"done">("idle");
-
-  function handleCta() {
-    if (!email || !email.includes("@")) { setStatus("error"); setTimeout(() => setStatus("idle"), 2000); return; }
-    setEmail("");
-    setStatus("done");
-    setTimeout(() => setStatus("idle"), 5000);
-  }
-
   return (
     <section id="cta-bar" style={{ background: "#1A4A2E", padding: "100px 0", position: "relative", overflow: "hidden" }}>
       {/* Grain */}
@@ -25,20 +12,8 @@ export function DemoForm() {
           <p className="reveal d2" style={{ color: "rgba(255,255,255,0.55)", fontSize: "1rem", maxWidth: 480, margin: "0 auto 36px" }}>
             Book a personalized demo and we&apos;ll show you exactly how Glowa AI works with your practice — your treatments, your clients, your workflow.
           </p>
-          <div className="reveal d3 cta-form-wrap" style={{ display: "flex", gap: 10, maxWidth: 420, margin: "0 auto 16px" }}>
-            <input
-              type="email"
-              placeholder={status === "done" ? "✓ We'll be in touch within 24 hours." : "Enter your work email"}
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              style={{
-                flex: 1, padding: "13px 18px", borderRadius: 8, outline: "none", transition: "all 0.2s",
-                border: `1px solid ${status === "error" ? "#ff5f57" : status === "done" ? "#3FAD6A" : "rgba(255,255,255,0.1)"}`,
-                background: "rgba(255,255,255,0.06)", color: "#fff",
-                fontFamily: "'DM Sans',sans-serif", fontSize: "0.9rem"
-              }}
-            />
-            <button onClick={handleCta} className="btn btn-mint">Book a demo →</button>
+          <div className="reveal d3" style={{ margin: "0 auto 16px" }}>
+            <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-lg">Book a demo →</a>
           </div>
           <div className="reveal d4 cta-trust-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 28, marginTop: 28, flexWrap: "wrap" }}>
             {["HIPAA Compliant","Clinically Validated","Dedicated Onboarding","Live in 1 Day"].map(t => (
@@ -51,7 +26,6 @@ export function DemoForm() {
       </div>
       <style>{`
         @media(max-width:768px){
-          .cta-form-wrap { flex-direction: column !important; }
           .cta-trust-wrap { gap: 14px !important; }
         }
       `}</style>

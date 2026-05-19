@@ -37,7 +37,7 @@ export function Nav() {
           <div style={{ display: "flex", alignItems: "center", gap: 12 }} className="nav-right-desktop">
             <a href="#cta-bar" style={{ fontSize: "0.88rem", color: "rgba(255,255,255,0.6)", cursor: "pointer", transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.6)")}>Sign in</a>
-            <a href="#cta-bar" className="btn btn-mint" style={{ padding: "10px 20px", fontSize: "0.85rem" }}>Book a demo</a>
+            <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-mint" style={{ padding: "10px 20px", fontSize: "0.85rem" }}>Book a demo</a>
           </div>
 
           {/* Hamburger */}
@@ -63,7 +63,7 @@ export function Nav() {
             color: "rgba(255,255,255,0.7)", borderBottom: "1px solid rgba(255,255,255,0.1)"
           }}>{l}</a>
         ))}
-        <a href="#cta-bar" onClick={() => setOpen(false)} className="btn btn-mint" style={{ width: "100%", justifyContent: "center", marginTop: 12 }}>Book a demo</a>
+        <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="btn btn-mint" style={{ width: "100%", justifyContent: "center", marginTop: 12 }}>Book a demo</a>
       </div>
 
       <style>{`

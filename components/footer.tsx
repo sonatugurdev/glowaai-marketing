@@ -27,7 +27,7 @@ export function Footer() {
             </div>
           </div>
 
-          <FooterCol title="Product" links={[["Features","#features"],["Results","#before-after"],["FAQ","#faq"],["Book a Demo","#cta-bar"]]}/>
+          <FooterCol title="Product" links={[["Features","#features"],["Results","#before-after"],["FAQ","#faq"],["Book a Demo","https://calendly.com/emre-glowaai/30min"]]}/>
           <FooterCol title="Company" links={[["About","#"],["Blog","#"],["Careers","#"],["Contact","mailto:hello@glowa.ai"],["Press","#"]]}/>
           <FooterCol title="Legal" links={[["Privacy Policy","#"],["Terms of Service","#"],["HIPAA Compliance","#"],["Security","#"],["Cookie Policy","#"]]}/>
         </div>
@@ -57,7 +57,7 @@ function FooterCol({ title, links }: { title: string; links: string[][] }) {
       <ul style={{ listStyle: "none" }}>
         {links.map(([label, href]) => (
           <li key={label} style={{ marginBottom: 10 }}>
-            <a href={href} style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.5)", transition: "color 0.2s" }}
+            <a href={href} {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.5)", transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.5)")}>{label}</a>
           </li>
         ))}
