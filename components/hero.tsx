@@ -1,178 +1,249 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const EVENTS = [
+  { title: "Booking confirmed", sub: "HydraFacial · booked in-app", icon: <svg viewBox="0 0 16 16" fill="none"><path d="M13 5l-7 7-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+  { title: "AI analysis complete", sub: "6 metrics scored · Sarah R.", icon: <svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+  { title: "New intake received", sub: "3 photos uploaded · 2 min ago", icon: <svg viewBox="0 0 16 16" fill="none"><path d="M2 12V4l6 4 6-4v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+  { title: "Treatment plan sent", sub: "SMS delivered to client", icon: <svg viewBox="0 0 16 16" fill="none"><path d="M2 4l6 5 6-5M2 4v8h12V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+  { title: "Revenue attributed", sub: "+$420 · Microneedling booked", icon: <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v12M5 4.5h4.5a2 2 0 110 4H6a2 2 0 100 4H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+];
+
+const METRICS = [
+  { name: "Hydration", val: 91, color: "var(--sage)", warn: false, desc: "Excellent moisture retention detected across cheek & forehead zones.", rec: "Maintain with current routine — no action needed", recIcon: "check" },
+  { name: "Texture", val: 74, color: "var(--sage)", warn: false, desc: "Mild surface irregularity on cheeks. Pore visibility within normal range.", rec: "Recommend · HydraFacial", recIcon: "plus" },
+  { name: "Pigmentation", val: 68, color: "#E8A22A", warn: true, desc: "Sun-induced melanin clustering across upper cheeks & temples.", rec: "Top recommendation · Vitamin C Peel", recIcon: "plus" },
+  { name: "Acne", val: 88, color: "var(--sage)", warn: false, desc: "Minimal active breakouts. No comedonal clustering detected.", rec: "No treatment recommended", recIcon: "check" },
+  { name: "Aging", val: 85, color: "var(--sage)", warn: false, desc: "Fine periorbital lines detected. Skin elasticity above age-bracket average.", rec: "Consider · Microneedling RF", recIcon: "plus" },
+];
 
 export function Hero() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const [activeMetric, setActiveMetric] = useState<number | null>(null);
+  const [floatIdx, setFloatIdx] = useState(0);
+  const [swapping, setSwapping] = useState(false);
+  const [score, setScore] = useState(0);
+
+  // Canvas dot grid
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("up"); obs.unobserve(e.target); }});
-    }, { threshold: 0.1 });
-    els.forEach(el => obs.observe(el));
-    return () => obs.disconnect();
+    const canvas = canvasRef.current;
+    const hero = heroRef.current;
+    if (!canvas || !hero) return;
+    const ctx = canvas.getContext("2d")!;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const SPACING = 26, BASE_R = 1.05, MAX_R = 3.6, INFLUENCE = 150, BASE_ALPHA = 0.22, MAX_ALPHA = 0.85;
+    let dots: { x: number; y: number; phase: number }[] = [];
+    let w = 0, h = 0;
+    const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
+
+    function resize() {
+      const rect = hero!.getBoundingClientRect();
+      w = rect.width; h = rect.height;
+      canvas!.width = w * dpr; canvas!.height = h * dpr;
+      canvas!.style.width = w + "px"; canvas!.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dots = [];
+      const cols = Math.ceil(w / SPACING) + 1;
+      const rows = Math.ceil(h / SPACING) + 1;
+      const ox = (w - (cols - 1) * SPACING) / 2;
+      const oy = (h - (rows - 1) * SPACING) / 2;
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+          dots.push({ x: ox + c * SPACING, y: oy + r * SPACING, phase: Math.random() * Math.PI * 2 });
+    }
+
+    let t = 0, animId = 0;
+    function tick() {
+      t += 0.012;
+      mouse.x += (mouse.tx - mouse.x) * 0.18;
+      mouse.y += (mouse.ty - mouse.y) * 0.18;
+      ctx.clearRect(0, 0, w, h);
+      for (const d of dots) {
+        const dx = d.x - mouse.x, dy = d.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        let prox = dist < INFLUENCE ? Math.pow(1 - dist / INFLUENCE, 2) : 0;
+        const breathe = Math.sin(t + d.phase) * 0.15;
+        const r = BASE_R + (MAX_R - BASE_R) * prox + breathe * 0.18;
+        const a = BASE_ALPHA + (MAX_ALPHA - BASE_ALPHA) * prox;
+        const mix = prox;
+        const cr = Math.round(122 + (8 - 122) * mix);
+        const cg = Math.round(164 + (145 - 164) * mix);
+        const cb = Math.round(174 + (178 - 174) * mix);
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${cr},${cg},${cb},${a})`;
+        ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      animId = requestAnimationFrame(tick);
+    }
+
+    const onMove = (e: MouseEvent) => {
+      const rect = hero!.getBoundingClientRect();
+      mouse.tx = e.clientX - rect.left;
+      mouse.ty = e.clientY - rect.top;
+    };
+    const onLeave = () => { mouse.tx = -9999; mouse.ty = -9999; };
+
+    resize();
+    tick();
+    window.addEventListener("resize", resize);
+    hero.addEventListener("mousemove", onMove);
+    hero.addEventListener("mouseleave", onLeave);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+      hero?.removeEventListener("mousemove", onMove);
+      hero?.removeEventListener("mouseleave", onLeave);
+    };
   }, []);
 
+  // Float cycler
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSwapping(true);
+      setTimeout(() => {
+        setFloatIdx(i => (i + 1) % EVENTS.length);
+        setSwapping(false);
+      }, 350);
+    }, 3200);
+    return () => clearInterval(id);
+  }, []);
+
+  // Score count-up
+  useEffect(() => {
+    const el = document.getElementById("overallScore");
+    if (!el) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const dur = 1400, start = performance.now();
+        const step = (now: number) => {
+          const p = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setScore(Math.round(82 * eased));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Touch auto-rotate for metric bubbles
+  useEffect(() => {
+    const isTouch = window.matchMedia("(hover: none)").matches;
+    if (!isTouch) return;
+    let i = 0;
+    const id = setInterval(() => {
+      setActiveMetric(i);
+      i = (i + 1) % METRICS.length;
+    }, 2600);
+    return () => clearInterval(id);
+  }, []);
+
+  const ev = EVENTS[floatIdx];
+
   return (
-    <section id="hero" style={{
-      background: "linear-gradient(170deg,#E8F5EE 0%,#F2FAF5 40%,#F8FBF9 100%)",
-      padding: "148px 0 0", position: "relative", overflow: "hidden"
-    }}>
-      {/* Grain */}
-      <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.25,
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`
-      }}/>
-      {/* Glow */}
-      <div style={{
-        position: "absolute", top: -100, left: "50%", transform: "translateX(-50%)",
-        width: 900, height: 600, pointerEvents: "none",
-        background: "radial-gradient(ellipse at center,rgba(63,173,106,0.13) 0%,transparent 65%)"
-      }}/>
-
-      {/* Content */}
-      <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 800, margin: "0 auto", padding: "0 28px" }}>
-        <h1 className="reveal" style={{ color: "#1C3022", marginBottom: 20 }}>
-          AI-Powered Skin<br/>Intelligence for <em style={{ fontStyle: "normal", color: "#3FAD6A" }}>MedSpas</em>
-        </h1>
-        <p className="reveal d1" style={{ fontSize: "1.1rem", color: "rgba(28,48,34,0.58)", maxWidth: 600, margin: "0 auto 36px" }}>
-          Clinical-grade AI skin analysis that increases your sales by <strong style={{ color: "#72C896" }}>42%</strong> and makes the sales process effortless — delivered to your clients before they walk through the door.
-        </p>
-        <div className="reveal d2" style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 48 }}>
-          <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-lg">Book a demo →</a>
-          <a href="#features" className="btn btn-ghost btn-lg">See how it works</a>
-        </div>
-        <div className="reveal d3" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 24, fontSize: "0.8rem", color: "rgba(28,48,34,0.42)", flexWrap: "wrap" }}>
-          {["HIPAA Compliant","Clinically Validated","Live in 1 Day","Dedicated Onboarding"].map(t => (
-            <span key={t} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ color: "#3FAD6A", fontWeight: 700 }}>✓</span>{t}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Mockup */}
-      <div className="reveal d4" style={{ position: "relative", zIndex: 1, maxWidth: 960, margin: "48px auto 0", padding: "0 28px" }}>
-        <div style={{
-          background: "#1F5535", border: "1px solid rgba(26,74,46,0.25)",
-          borderRadius: "16px 16px 0 0", overflow: "hidden",
-          boxShadow: "0 -8px 60px rgba(26,74,46,0.18),0 0 0 1px rgba(26,74,46,0.08)"
-        }}>
-          {/* Browser bar */}
-          <div style={{ background: "#162D1F", borderBottom: "1px solid rgba(255,255,255,0.1)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 8 }}>
-            <div>
-              <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: "#FF5F57", marginRight: 6 }}/>
-              <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: "#FFBD2E", marginRight: 6 }}/>
-              <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: "#28CA41" }}/>
+    <section className="hero snap-section" data-snap-index="0" data-snap-label="Home" ref={heroRef}>
+      <canvas id="dotGrid" ref={canvasRef} aria-hidden="true" />
+      <div className="container">
+        <div className="hero-inner">
+          <div className="hero-content">
+            <div className="hero-eyebrow"><span />AI-Powered Skin Intelligence</div>
+            <h1>Clinical-grade AI for <em>MedSpas</em></h1>
+            <p className="hero-sub">AI skin analysis that increases your sales by <strong style={{ color: "var(--ink)", fontWeight: 600 }}>42%</strong> and makes the sales process effortless — delivered to your clients before they walk through the door.</p>
+            <div className="hero-actions">
+              <a href="#contact" className="btn btn-sage btn-lg">
+                Book a demo
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </a>
+              <a href="#features" className="btn btn-outline btn-lg">See how it works</a>
             </div>
-            <div style={{ flex: 1, background: "rgba(255,255,255,0.05)", borderRadius: 5, padding: "5px 12px", fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", textAlign: "center" }}>
-              app.glowa.ai/dashboard
-            </div>
-          </div>
-
-          {/* Body */}
-          <div className="mockup-body-grid" style={{ display: "grid", gridTemplateColumns: "220px 1fr", minHeight: 400 }}>
-            {/* Sidebar */}
-            <div className="mock-sidebar-panel" style={{ background: "#0B1C12", borderRight: "1px solid rgba(255,255,255,0.1)", padding: "20px 0" }}>
-              <div style={{ padding: "0 18px 20px", borderBottom: "1px solid rgba(255,255,255,0.1)", marginBottom: 16 }}>
-                <svg width="90" height="32" viewBox="0 0 210 74" fill="none">
-                  <text x="0" y="52" fontFamily="'DM Sans',sans-serif" fontSize="52" fontWeight="400" fill="#FFFFFF" letterSpacing="-1">Glowa</text>
-                  <rect x="160" y="33" width="34" height="22" rx="5" fill="#3FAD6A"/>
-                  <text x="165" y="49" fontFamily="'DM Sans',sans-serif" fontSize="12" fontWeight="500" fill="#FFFFFF" letterSpacing="1.5">AI</text>
-                </svg>
-              </div>
+            <div className="hero-badges">
               {[
-                { icon: "📊", label: "Dashboard", active: true },
-                { icon: "👥", label: "Clients" },
-                { icon: "💬", label: "Intake Links" },
-                { icon: "✨", label: "AI Reports" },
-                { icon: "📅", label: "Bookings" },
-                { icon: "📈", label: "Analytics" },
-                { icon: "⚙️", label: "Settings" },
-              ].map(item => (
-                <div key={item.label} style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  padding: "9px 18px", fontSize: "0.8rem",
-                  color: item.active ? "#fff" : "rgba(255,255,255,0.45)",
-                  background: item.active ? "rgba(93,184,122,0.1)" : "transparent",
-                  borderLeft: item.active ? "2px solid #3FAD6A" : "2px solid transparent",
-                  cursor: "pointer"
-                }}>
-                  <span style={{ fontSize: "0.95rem", width: 16, textAlign: "center" }}>{item.icon}</span>
-                  {item.label}
-                </div>
+                { label: "HIPAA Compliant", path: "M13 6V5a5 5 0 00-10 0v1M3 6h10a1 1 0 011 1v6a1 1 0 01-1 1H3a1 1 0 01-1-1V7a1 1 0 011-1z" },
+                { label: "Clinically Validated", path: "M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1L2 5.3l4.2-.7L8 1z" },
+                { label: "Live in 1 Day", path: "M8 2v4l3 3M14 8A6 6 0 112 8a6 6 0 0112 0z" },
+                { label: "Dedicated Onboarding", path: "M13 5l-7 7-3-3" },
+              ].map(b => (
+                <span key={b.label} className="hero-badge">
+                  <svg viewBox="0 0 16 16" fill="none"><path d={b.path} stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  {b.label}
+                </span>
               ))}
             </div>
+          </div>
 
-            {/* Main */}
-            <div style={{ padding: 24 }}>
-              {/* Top row */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div className="hero-visual">
+            <div className="report-card">
+              <div className="report-scan" />
+              <div className="report-header">
+                <span className="report-title">Skin Report</span>
+                <span className="report-live">Live</span>
+              </div>
+              <div className="report-client">
+                <div className="report-avatar">SR</div>
                 <div>
-                  <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#fff" }}>Good morning, Dr. Logan 👋</div>
-                  <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)" }}>Tuesday, April 29, 2026 · JUVA Skin & Laser Center</div>
+                  <div className="report-client-name">Sarah R.</div>
+                  <div className="report-client-sub">Skin assessment · 3 photos analyzed</div>
                 </div>
-                <button style={{ background: "#3FAD6A", color: "#fff", border: "none", borderRadius: 6, padding: "7px 14px", fontSize: "0.72rem", fontWeight: 500, cursor: "pointer", fontFamily: "inherit" }}>
-                  + Send Intake Link
-                </button>
               </div>
-
-              {/* Stats */}
-              <div className="mock-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-                {[
-                  { val: "48", lbl: "Intakes this month", chg: "↑ 23% vs last month" },
-                  { val: "91%", lbl: "Completion rate", chg: "↑ 12% vs last month" },
-                  { val: "38", lbl: "Bookings from AI", chg: "↑ 42% sales increase" },
-                  { val: "$42K", lbl: "Revenue attributed", chg: "↑ $8K per client avg" },
-                ].map(s => (
-                  <div key={s.lbl} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: 14 }}>
-                    <div style={{ fontSize: "1.4rem", fontWeight: 600, color: "#fff", letterSpacing: "-0.5px" }}>{s.val}</div>
-                    <div style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{s.lbl}</div>
-                    <div style={{ fontSize: "0.65rem", color: "#3FAD6A", marginTop: 4 }}>{s.chg}</div>
+              <div className="overall-score">
+                <span className="overall-label">Overall Skin Score</span>
+                <span className="overall-val" id="overallScore">{score}</span>
+              </div>
+              <div className="skin-metrics" onMouseLeave={() => setActiveMetric(null)}>
+                {METRICS.map((m, i) => (
+                  <div
+                    key={m.name}
+                    className={`metric-row${activeMetric === i ? " is-active" : ""}`}
+                    onMouseEnter={() => setActiveMetric(i)}
+                    tabIndex={0}
+                    onFocus={() => setActiveMetric(i)}
+                  >
+                    <span className="metric-name">{m.name}</span>
+                    <div className="metric-bar-wrap">
+                      <div className="metric-bar" style={{ width: `${m.val}%`, background: m.color }} />
+                    </div>
+                    <span className="metric-score">{m.val}</span>
+                    <div className="metric-bubble">
+                      <div className="metric-bubble-head">
+                        <span className="metric-bubble-title">{m.name}</span>
+                        <span className={`metric-bubble-score${m.warn ? " warn" : ""}`}>{m.val} / 100</span>
+                      </div>
+                      <p className="metric-bubble-desc">{m.desc}</p>
+                      <div className="metric-bubble-rec">
+                        <svg viewBox="0 0 16 16" fill="none">
+                          {m.recIcon === "check"
+                            ? <path d="M13 5l-7 7-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            : <path d="M8 1v14M1 8h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                          }
+                        </svg>
+                        {m.rec}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
+              <div className="report-rec">
+                <div className="report-rec-label">Top Recommendation <span className="report-rec-priority">Priority #1</span></div>
+                <div className="report-rec-text">Vitamin C Brightening Peel — targets pigmentation score</div>
+              </div>
+            </div>
 
-              {/* Table */}
-              <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, overflow: "hidden" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", padding: "9px 14px", borderBottom: "1px solid rgba(255,255,255,0.1)", fontSize: "0.65rem", fontWeight: 500, color: "rgba(255,255,255,0.3)", letterSpacing: "0.5px", textTransform: "uppercase" }}>
-                  <span>Client</span><span>Skin Score</span><span>Recommendation</span><span>Status</span>
-                </div>
-                {[
-                  { av: "SJ", name: "Sarah J.", score: 82, scoreHi: true, rec: "HydraFacial", statusColor: "#3FAD6A", status: "Booked", avBg: "linear-gradient(135deg,#3FAD6A,#2D8A52)" },
-                  { av: "ML", name: "Maria L.", score: 67, scoreHi: false, rec: "Chemical Peel", statusColor: "#FFBD2E", status: "Pending", avBg: "linear-gradient(135deg,#8ED4A8,#5DB87A)" },
-                  { av: "AK", name: "Amy K.", score: 91, scoreHi: true, rec: "Microneedling", statusColor: "#3FAD6A", status: "Booked", avBg: "linear-gradient(135deg,#5DB87A,#3a9a5c)" },
-                ].map((row, i) => (
-                  <div key={row.name} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", padding: "10px 14px", borderBottom: i < 2 ? "1px solid rgba(30,61,42,0.5)" : "none", fontSize: "0.72rem", color: "rgba(255,255,255,0.7)", alignItems: "center" }}>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 24, height: 24, borderRadius: "50%", background: row.avBg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 600, color: "#fff", flexShrink: 0 }}>{row.av}</div>
-                      {row.name}
-                    </div>
-                    <div>
-                      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 36, height: 20, borderRadius: 4, fontSize: "0.65rem", fontWeight: 600, background: row.scoreHi ? "rgba(93,184,122,0.15)" : "rgba(255,189,46,0.12)", color: row.scoreHi ? "#3FAD6A" : "#FFBD2E" }}>{row.score}</span>
-                    </div>
-                    <div style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.5)" }}>{row.rec}</div>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: row.statusColor, flexShrink: 0 }}/>
-                      <span style={{ color: row.statusColor, fontSize: "0.68rem", fontWeight: 500 }}>{row.status}</span>
-                    </div>
-                  </div>
-                ))}
+            <div className={`hero-float${swapping ? " is-swapping" : ""}`}>
+              <div className="f-icon">{ev.icon}</div>
+              <div className="f-text">
+                <p>{ev.title}</p>
+                <span>{ev.sub}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @media(max-width:768px){
-          #hero { padding: 120px 0 0 !important; }
-          .mock-sidebar-panel { display: none !important; }
-          .mockup-body-grid { grid-template-columns: 1fr !important; }
-          .mock-stats-grid { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-        }
-        @media(max-width:1024px){
-          .mockup-body-grid { grid-template-columns: 180px 1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }

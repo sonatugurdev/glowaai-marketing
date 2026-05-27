@@ -1,97 +1,84 @@
 "use client";
+import { useState } from "react";
 
-import { Reveal, RevealStagger, RevealItem } from "./reveal";
-
-const steps = [
+const CARDS = [
   {
-    number: "01",
-    title: "SMS link goes out",
-    body: "The moment a patient books, they get a branded intake link. No app download. No account creation. It opens in the browser they&apos;re already in.",
-    detail: "Sent automatically via your booking flow"
+    step: "Step 01",
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 12c0 4.5 4 8 9 8a9.9 9.9 0 0 0 4.3-1L21 20l-1.4-3.7C20.5 15 21 13.6 21 12c0-4.5-4-8-9-8s-9 3.5-9 8z" strokeLinecap="round" strokeLinejoin="round"/><path d="M8 11h.01M12 11h.01M16 11h.01" strokeLinecap="round"/></svg>,
+    title: "SMS-first intake",
+    body: "One link sent. Ten smart questions answered. Three guided photos uploaded — all before they walk in.",
+    backTitle: "Frictionless, mobile-native intake",
+    backBody: "Glowa replaces clipboards with a personalized SMS link. Clients complete an adaptive 10-question flow and upload 3 guided selfies — no app, no account, no wait.",
+    bullets: ["Adaptive questions based on goals & history", "Pose-guided photo capture for clinical accuracy", "Secure link expires after 48 hours"],
   },
   {
-    number: "02",
-    title: "Patient captures photos + history",
-    body: "Guided photo capture — frontal and two 45° angles — plus structured medical history with medication autocomplete. Under ten minutes, done at home.",
-    detail: "HIPAA-compliant, photos stored encrypted"
+    step: "Step 02",
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="11" cy="11" r="7" strokeLinecap="round"/><circle cx="11" cy="11" r="3" strokeLinecap="round"/><path d="M16 16l4.5 4.5" strokeLinecap="round"/></svg>,
+    title: "Photo analysis",
+    body: "Clinical-grade computer vision scores 6 skin metrics on a 0–100 scale — validated by a board-certified dermatologist.",
+    backTitle: "Six metrics. One objective score.",
+    backBody: "Each uploaded photo is analyzed by Glowa's vision model — trained on dermatology-grade imagery and clinically validated by Dr. Logan M. Horejsi, MD.",
+    bullets: ["Hydration, Texture, Pigmentation, Acne, Aging, Redness", "Frontal + profile analysis with zone mapping", "HIPAA-compliant photo storage & auto-purge"],
   },
   {
-    number: "03",
-    title: "Glowa generates the report",
-    body: "Claude Vision and MakeupAR HD analyze the photos in parallel. The result: a structured skin analysis, Glogau and Fitzpatrick classification, and a first-pass treatment suggestion.",
-    detail: "Ready in under 90 seconds"
+    step: "Step 03",
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 5a2 2 0 012-2h2a2 2 0 012 2v0a2 2 0 01-2 2h-2a2 2 0 01-2-2z" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 14l2 2 4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    title: "Treatment plan",
+    body: "Personalized recommendations ranked by priority — with clear rationale and one-tap booking from the report.",
+    backTitle: "The AI makes the case. Clients say yes.",
+    backBody: "Every plan ranks treatments by clinical priority and ties them back to specific metrics — so recommendations feel earned, not pitched.",
+    bullets: ["Treatments ranked by impact on weakest metrics", "One-tap booking directly from the AI report", "Revenue confirmed before the consultation begins"],
   },
-  {
-    number: "04",
-    title: "Practitioner walks in ready",
-    body: "Your clinician opens the report on the dashboard before the visit. They start the consult with context, a plan, and time to focus on the patient — not the paperwork.",
-    detail: "Integrates with your existing workflow"
-  }
 ];
 
 export function HowItWorks() {
-  return (
-    <section id="how" className="relative bg-white py-24 md:py-32">
-      <div className="container-edge">
-        <div className="flex flex-col items-start md:flex-row md:items-end md:justify-between">
-          <div className="max-w-xl">
-            <Reveal>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-mint-pale bg-mint-muted/60 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-mint-dark">
-                <span className="h-1 w-1 rounded-full bg-mint" />
-                How it works
-              </span>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="mt-4 text-display-lg font-display font-light text-forest text-balance">
-                Four steps. <em className="font-normal text-mint-dark">One visit, already underway</em> before the patient arrives.
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal delay={0.1} className="mt-6 md:mt-0">
-            <p className="max-w-sm text-[15px] leading-relaxed text-ink-muted">
-              No new systems to learn. Plugs into your current intake and
-              scheduling. Your patients get a better experience; your
-              practitioners get fifteen minutes back.
-            </p>
-          </Reveal>
-        </div>
+  const [flipped, setFlipped] = useState<number | null>(null);
+  function toggle(i: number) { setFlipped(f => f === i ? null : i); }
 
-        <RevealStagger className="mt-16 grid gap-px bg-line md:grid-cols-2" staggerDelay={0.1}>
-          {steps.map((step, i) => (
-            <RevealItem key={step.number} className="bg-white">
-              <div className="group flex h-full flex-col p-8 transition-colors hover:bg-cream/50 md:p-10">
-                <div className="mb-6 flex items-baseline gap-4">
-                  <span className="font-mono text-[12px] font-medium tracking-widest text-mint-dark">
-                    {step.number}
-                  </span>
-                  <span className="h-px flex-1 bg-line" />
-                  <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-ink-soft">
-                    {`Step ${i + 1} / 4`}
+  return (
+    <section className="features section snap-section" id="features" data-snap-index="1" data-snap-label="How it works">
+      <div className="container">
+        <div className="section-header">
+          <span className="label">How It Works</span>
+          <h2>Meet your patients before they meet you</h2>
+          <p>From the first SMS to the final treatment plan — one seamless workflow that converts before clients even arrive.</p>
+        </div>
+        <div className="flip-grid">
+          {CARDS.map((c, i) => (
+            <div
+              key={i}
+              className={`flip-card${flipped === i ? " is-flipped" : ""}`}
+              tabIndex={0}
+              role="button"
+              aria-pressed={flipped === i}
+              onClick={() => toggle(i)}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(i); } }}
+            >
+              <div className="flip-inner">
+                <div className="flip-face flip-front">
+                  <span className="flip-step">{c.step}</span>
+                  <div className="flip-icon">{c.icon}</div>
+                  <h3>{c.title}</h3>
+                  <p>{c.body}</p>
+                  <span className="flip-tap">
+                    Tap to learn more
+                    <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </span>
                 </div>
-                <h3 className="font-display text-2xl font-normal text-forest text-balance">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-[14.5px] leading-[1.7] text-ink-muted">
-                  {step.body}
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-[12px] text-mint-dark">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <circle cx="6" cy="6" r="5.25" stroke="currentColor" strokeWidth="1" />
-                    <path
-                      d="M4 6l1.5 1.5L8.5 4.5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  {step.detail}
+                <div className="flip-face flip-back">
+                  <span className="flip-step">{c.step} · Detail</span>
+                  <h3>{c.backTitle}</h3>
+                  <p>{c.backBody}</p>
+                  <ul>{c.bullets.map(b => <li key={b}>{b}</li>)}</ul>
+                  <span className="flip-back-close">
+                    <svg viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Tap to flip back
+                  </span>
                 </div>
               </div>
-            </RevealItem>
+            </div>
           ))}
-        </RevealStagger>
+        </div>
       </div>
     </section>
   );

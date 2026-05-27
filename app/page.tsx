@@ -1,31 +1,31 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
-import { TrustedBy } from "@/components/trusted-by";
-import { Features } from "@/components/features";
-import { BeforeAfter } from "@/components/before-after";
-import { Metrics } from "@/components/metrics";
-import { Testimonials } from "@/components/testimonials";
-import { FAQ } from "@/components/faq";
-import { DemoForm } from "@/components/demo-form";
-import { Footer } from "@/components/footer";
-import { RevealObserver } from "@/components/reveal-observer";
+import { SectionNav } from "@/components/section-nav";
+import { HowItWorks } from "@/components/how-it-works";
+import { ROISection } from "@/components/roi-section";
+import { VideoSection } from "@/components/video-section";
+import { ResultsSection } from "@/components/results-section";
+import { AdvisorsSection } from "@/components/advisors-section";
+import { RedirectSection } from "@/components/redirect-section";
+import { FAQSection } from "@/components/faq-section";
+import { SiteFooter } from "@/components/site-footer";
 
 export default function Home() {
   return (
     <>
       <Nav />
+      <SectionNav />
       <main>
         <Hero />
-        <TrustedBy />
-        <Features />
-        <BeforeAfter />
-        <Metrics />
-        <Testimonials />
-        <FAQ />
-        <DemoForm />
+        <HowItWorks />
+        <ROISection />
+        <VideoSection />
+        <ResultsSection />
+        <AdvisorsSection />
+        <RedirectSection />
+        <FAQSection />
       </main>
-      <Footer />
-      <RevealObserver />
+      <SiteFooter />
     </>
   );
 }

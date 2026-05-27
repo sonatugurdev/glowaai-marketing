@@ -1,78 +1,58 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Nav() {
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const close = () => setOpen(false);
+
   return (
     <>
-      <nav id="nav" style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: "rgba(26,74,46,0.97)", backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255,255,255,0.08)", transition: "box-shadow 0.3s"
-      }}>
-        <div className="nav-inner" style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          height: 64, maxWidth: 1120, margin: "0 auto", padding: "0 28px"
-        }}>
-          {/* Logo */}
-          <a href="#">
-            <svg width="164" height="56" viewBox="0 0 210 74" fill="none">
-              <text x="0" y="52" fontFamily="'DM Sans',sans-serif" fontSize="52" fontWeight="400" fill="#FFFFFF" letterSpacing="-1">Glowa</text>
-              <rect x="160" y="33" width="34" height="22" rx="5" fill="#3FAD6A"/>
-              <text x="165" y="49" fontFamily="'DM Sans',sans-serif" fontSize="12" fontWeight="500" fill="#FFFFFF" letterSpacing="1.5">AI</text>
-              <rect x="0" y="62" width="194" height="0.5" fill="#1E3D2A"/>
-              <text x="0" y="73" fontFamily="'DM Sans',sans-serif" fontSize="7.5" fontWeight="400" fill="#8ED4A8" letterSpacing="2">AI-POWERED SKIN INTELLIGENCE</text>
+      <nav className={scrolled ? "scrolled" : ""}>
+        <div className="nav-inner">
+          <a href="/" aria-label="Glowa AI">
+            <svg width="172" height="62" viewBox="0 0 148 52" fill="none">
+              <g transform="translate(0,6)">
+                <path d="M18 2 C18 2 6 8 6 20 C6 29 13 36 20 36 C20 36 20 24 30 16 C22 20 20 28 20 28 C20 28 26 14 18 2Z" fill="#0891B2"/>
+                <text x="40" y="30" fontFamily="DM Sans, sans-serif" fontSize="22" fontWeight="500" fill="#0B1F26" letterSpacing="-0.5">Glowa</text>
+                <rect x="108" y="18" width="24" height="15" rx="4" fill="#0B1F26"/>
+                <text x="120" y="29.5" fontFamily="DM Sans, sans-serif" fontSize="9" fontWeight="700" fill="white" textAnchor="middle" letterSpacing="0.5">AI</text>
+              </g>
             </svg>
           </a>
-
-          {/* Desktop links */}
-          <ul style={{ display: "flex", alignItems: "center", gap: 28, listStyle: "none" }} className="nav-links-desktop">
-            {[["Features","#features"],["Results","#before-after"],["Testimonials","#testimonials"],["FAQ","#faq"]].map(([l,h]) => (
-              <li key={h}><a href={h} style={{ fontSize: "0.88rem", fontWeight: 400, color: "rgba(255,255,255,0.7)", transition: "color 0.2s", cursor: "pointer" }}
-                onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.7)")}>{l}</a></li>
-            ))}
+          <ul className="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#results-section">Results</a></li>
+            <li><a href="#faq">FAQ</a></li>
           </ul>
-
-          {/* Desktop right */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }} className="nav-right-desktop">
-            <a href="#cta-bar" style={{ fontSize: "0.88rem", color: "rgba(255,255,255,0.6)", cursor: "pointer", transition: "color 0.2s" }}
-              onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.6)")}>Sign in</a>
-            <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-mint" style={{ padding: "10px 20px", fontSize: "0.85rem" }}>Book a demo</a>
+          <div className="nav-actions">
+            <a href="#contact" className="btn btn-outline" style={{ padding: "10px 20px", fontSize: ".88rem" }}>Sign in</a>
+            <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "10px 20px", fontSize: ".88rem" }}>Book a demo</a>
           </div>
-
-          {/* Hamburger */}
-          <button onClick={() => setOpen(v => !v)} className="hamburger-btn" style={{ display: "none", flexDirection: "column", gap: 5, cursor: "pointer", padding: 4, background: "none", border: "none" }}
-            aria-label="Menu">
-            <span style={{ display: "block", width: 20, height: 1.5, background: "#fff", borderRadius: 2 }}/>
-            <span style={{ display: "block", width: 20, height: 1.5, background: "#fff", borderRadius: 2 }}/>
-            <span style={{ display: "block", width: 20, height: 1.5, background: "#fff", borderRadius: 2 }}/>
+          <button className="nav-hamburger" onClick={() => setOpen(v => !v)} aria-label="Menu">
+            <span style={{ transform: open ? "rotate(45deg) translate(5px,5px)" : undefined }} />
+            <span style={{ opacity: open ? 0 : 1 }} />
+            <span style={{ transform: open ? "rotate(-45deg) translate(5px,-5px)" : undefined }} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <div style={{
-        display: open ? "block" : "none",
-        position: "fixed", top: 64, left: 0, right: 0,
-        background: "#1A4A2E", borderBottom: "1px solid rgba(255,255,255,0.1)",
-        padding: "16px 28px 24px", zIndex: 99
-      }}>
-        {[["Features","#features"],["Results","#before-after"],["Testimonials","#testimonials"],["FAQ","#faq"]].map(([l,h]) => (
-          <a key={h} href={h} onClick={() => setOpen(false)} style={{
-            display: "block", padding: "12px 0", fontSize: "0.95rem",
-            color: "rgba(255,255,255,0.7)", borderBottom: "1px solid rgba(255,255,255,0.1)"
-          }}>{l}</a>
-        ))}
-        <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="btn btn-mint" style={{ width: "100%", justifyContent: "center", marginTop: 12 }}>Book a demo</a>
+      <div className={`mobile-menu${open ? " open" : ""}`}>
+        <a href="#features" onClick={close}>Features</a>
+        <a href="#results-section" onClick={close}>Results</a>
+        <a href="#faq" onClick={close}>FAQ</a>
+        <div className="mobile-actions">
+          <a href="#contact" className="btn btn-outline btn-lg" onClick={close}>Sign in</a>
+          <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" onClick={close}>Book a demo</a>
+        </div>
       </div>
-
-      <style>{`
-        @media(max-width:768px){
-          .nav-links-desktop { display: none !important; }
-          .nav-right-desktop { display: none !important; }
-          .hamburger-btn { display: flex !important; }
-        }
-      `}</style>
     </>
   );
 }
