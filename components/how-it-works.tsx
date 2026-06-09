@@ -17,7 +17,7 @@ const CARDS = [
     title: "Photo analysis",
     body: "Clinical-grade computer vision scores 6 skin metrics on a 0–100 scale — validated by a board-certified dermatologist.",
     backTitle: "Six metrics. One objective score.",
-    backBody: "Each uploaded photo is analyzed by Glowa's vision model — trained on dermatology-grade imagery and clinically validated by Dr. Logan M. Horejsi, MD.",
+    backBody: "Each uploaded photo is analyzed by Glowa's vision model — trained on dermatology-grade imagery and clinically validated by Logan M. Horejsi, Board-Certified Dermatologist.",
     bullets: ["Hydration, Texture, Pigmentation, Acne, Aging, Redness", "Frontal + profile analysis with zone mapping", "HIPAA-compliant photo storage & auto-purge"],
   },
   {

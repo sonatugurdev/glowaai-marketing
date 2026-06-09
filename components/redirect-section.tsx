@@ -16,15 +16,6 @@ export function RedirectSection() {
           </p>
         </div>
 
-        <div className="redirect-trusted">
-          <p className="redirect-trusted-label">Trusted by leading MedSpas across New York City</p>
-          <div className="trusted-strip trusted-strip-dark">
-            <div className="trusted-track">
-              {doubled.map((n, i) => <span key={i} className="trusted-name" aria-hidden={i >= NAMES.length ? "true" : undefined}>{n}</span>)}
-            </div>
-          </div>
-        </div>
-
         <div className="cta-actions">
           <a href="https://calendly.com/emre-glowaai/30min" target="_blank" rel="noopener noreferrer" className="btn btn-sage btn-lg">
             Book a demo
