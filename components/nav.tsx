@@ -18,7 +18,7 @@ export function Nav() {
       <nav className={scrolled ? "scrolled" : ""}>
         <div className="nav-inner">
           <a href="/" aria-label="Glowa AI">
-            <svg width="172" height="62" viewBox="0 0 148 52" fill="none">
+            <svg width="195" height="70" viewBox="0 0 148 52" fill="none">
               <g transform="translate(0,6)">
                 <path d="M18 2 C18 2 6 8 6 20 C6 29 13 36 20 36 C20 36 20 24 30 16 C22 20 20 28 20 28 C20 28 26 14 18 2Z" fill="#0891B2"/>
                 <text x="40" y="30" fontFamily="DM Sans, sans-serif" fontSize="22" fontWeight="500" fill="#0B1F26" letterSpacing="-0.5">Glowa</text>

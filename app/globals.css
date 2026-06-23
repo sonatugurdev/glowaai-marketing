@@ -371,8 +371,10 @@ body { overflow-x:hidden; }
   .nav-hamburger { display:flex; }
   .hero-inner { grid-template-columns:1fr; }
   .hero-visual { display:none; }
-  .advisor-card { grid-template-columns:1fr;text-align:center;padding:32px 24px;gap:28px; }
-  .advisor-photo { width:200px;height:200px;margin:0 auto; }
+  .advisor-card,
+  .snap-section.advisors .advisor-card { grid-template-columns:1fr;text-align:center;padding:32px 24px;gap:28px; }
+  .advisor-photo,
+  .snap-section.advisors .advisor-photo { width:200px;height:200px;margin:0 auto; }
   .footer-top { grid-template-columns:1fr 1fr; }
   .section-nav { display:none; }
 }
