@@ -230,7 +230,7 @@ export function Hero() {
               </div>
               <div className="report-rec">
                 <div className="report-rec-label">Top Recommendation <span className="report-rec-priority">Priority #1</span></div>
-                <div className="report-rec-text">Vitamin C Brightening Peel — targets pigmentation score</div>
+                <div className="report-rec-text">Botox & Peel — targets texture and pigmentation score</div>
               </div>
             </div>
 

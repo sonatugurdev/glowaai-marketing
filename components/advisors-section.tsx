@@ -24,7 +24,7 @@ export function AdvisorsSection() {
           <div className="advisor-info">
             <span className="advisor-eyebrow">Medical Advisor</span>
             <h3>Logan M. Horejsi</h3>
-            <p className="advisor-role">Board-Certified Dermatologist</p>
+            <p className="advisor-role">Physician Associate</p>
             <p className="advisor-bio">
               Logan leads clinical validation at Glowa AI — ensuring every skin score and treatment recommendation reflects clinical standards developed across years of dermatology practice. Her oversight is what makes Glowa&apos;s AI <em>clinical-grade</em>, not just <em>smart</em>.
             </p>

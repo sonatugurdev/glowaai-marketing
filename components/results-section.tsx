@@ -104,10 +104,10 @@ export function ResultsSection() {
               afterLabel="After · 8 wks"
             />
             <div className="result-meta">
-              <span className="result-treatment">Vitamin C Peel · 3 sessions</span>
+              <span className="result-treatment">Botox & Peel · 3 sessions</span>
               <span className="result-weeks">8 weeks</span>
             </div>
-            <p className="result-quote">"The AI flagged pigmentation I didn't even know I had. The plan it built actually worked."</p>
+            <p className="result-quote">"AI recommended treatments were aligned with my concerns and goals. The plan it built actually worked."</p>
             <div className="result-author">
               <div className="result-avatar">MA</div>
               <div>
@@ -126,7 +126,7 @@ export function ResultsSection() {
               afterLabel="After · 12 wks"
             />
             <div className="result-meta">
-              <span className="result-treatment">IPL + Microneedling · 4 sessions</span>
+              <span className="result-treatment">IPL · 4 sessions</span>
               <span className="result-weeks">12 weeks</span>
             </div>
             <p className="result-quote">"I came in for one thing and left with a real plan. It felt clinical, not pushy."</p>
